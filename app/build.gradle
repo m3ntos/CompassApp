@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -36,5 +40,6 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"
     implementation 'com.github.pwittchen:reactivesensors-rx2:0.2.0'
-
+    implementation 'com.patloew.rxlocation:rxlocation:1.0.5'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }
