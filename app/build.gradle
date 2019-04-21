@@ -42,4 +42,9 @@ dependencies {
     implementation 'com.github.pwittchen:reactivesensors-rx2:0.2.0'
     implementation 'com.patloew.rxlocation:rxlocation:1.0.5'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+
+    implementation "com.gojuno.koptional:koptional:1.6.0"
+    implementation 'com.github.florent37:runtime-permission-kotlin:1.1.0'
+
+
 }
