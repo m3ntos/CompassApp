@@ -61,12 +61,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAzimuth(azimuth: Int) {
         Log.d("LOL", "azimuth $azimuth")
-        tvAzimuth.text = (azimuth).toString()
+        compassView.setAzimuth(azimuth)
     }
 
     private fun showBearing(bearing: Int) {
         Log.d("LOL", "bearing $bearing")
-        tvBearing.text = (bearing).toString()
+        compassView.setBearing(bearing)
     }
 
     private fun showCurrentLocation(location: Location) {
