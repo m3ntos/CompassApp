@@ -24,6 +24,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         askPermission(ACCESS_FINE_LOCATION) { viewModel.onLocationPermissionGranted() }
+
+        btnSetLocation.setOnClickListener {
+            askPermission(ACCESS_FINE_LOCATION) {
+                EnterCoordinatesDialog()
+                    .onCoordinatesSet { viewModel.setTargetLocation(it) }
+                    .show(supportFragmentManager, "enterCoordinatesDialog")
+            }
+        }
     }
 
     override fun onStart() {
@@ -33,9 +41,17 @@ class MainActivity : AppCompatActivity() {
             .applySchedulers()
             .subscribe(::showAzimuth)
 
+        disposables += viewModel.bearing
+            .applySchedulers()
+            .subscribe(::showBearing)
+
         disposables += viewModel.currentLocation
             .applySchedulers()
-            .subscribe(::showLocation)
+            .subscribe(::showCurrentLocation)
+
+        disposables += viewModel.targetLocation
+            .applySchedulers()
+            .subscribe(::showTargetLocation)
     }
 
     override fun onStop() {
@@ -45,12 +61,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAzimuth(azimuth: Int) {
         Log.d("LOL", "azimuth $azimuth")
-        textView.text = (azimuth).toString()
+        tvAzimuth.text = (azimuth).toString()
     }
 
-    private fun showLocation(location: Location) {
-        Log.d("LOL", "location $location")
-        tvLocation.text = "lat ${location.latitude} lng ${location.longitude}"
+    private fun showBearing(bearing: Int) {
+        Log.d("LOL", "bearing $bearing")
+        tvBearing.text = (bearing).toString()
+    }
+
+    private fun showCurrentLocation(location: Location) {
+        Log.d("LOL", "current location $location")
+        tvCurrentLocation.text = "lat ${location.latitude} lng ${location.longitude}"
+    }
+
+    private fun showTargetLocation(location: Location) {
+        Log.d("LOL", "ratget location $location")
+        tvTargetLocation.text = "lat ${location.latitude} lng ${location.longitude}"
     }
 
     private fun <T> Observable<T>.applySchedulers(): Observable<T> {
