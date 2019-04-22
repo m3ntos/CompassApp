@@ -1,4 +1,4 @@
-package com.example.mentos.compassapp
+package com.example.mentos.compassapp.providers
 
 import android.annotation.SuppressLint
 import android.content.Context

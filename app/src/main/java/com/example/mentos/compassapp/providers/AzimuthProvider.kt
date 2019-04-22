@@ -1,4 +1,4 @@
-package com.example.mentos.compassapp
+package com.example.mentos.compassapp.providers
 
 import android.content.Context
 import android.hardware.Sensor.TYPE_ACCELEROMETER
@@ -25,12 +25,12 @@ class AzimuthProvider(appContext: Context) {
         .filter(ReactiveSensorFilter.filterSensorChanged())
         .map { it.sensorEvent.values }
 
-    val azimuthInDegrees: Flowable<Int> = Flowables
+    val azimuthInDegrees: Flowable<Float> = Flowables
         .combineLatest(accelerometerEvents, magneticFieldEvents, ::calcOrientation)
         .map { orientationAngles -> orientationAngles[0] }
         .map { Math.toDegrees(it.toDouble()) }
         .map { angle -> if (angle < 0) angle + 360 else angle }
-        .map { it.roundToInt() }
+        .map { it.toFloat() }
 
 
     private fun calcOrientation(accelerometer: FloatArray, magnetometer: FloatArray): FloatArray {
