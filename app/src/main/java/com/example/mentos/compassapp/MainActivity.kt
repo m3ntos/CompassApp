@@ -59,12 +59,12 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    private fun showAzimuth(azimuth: Int) {
+    private fun showAzimuth(azimuth: Float) {
         Log.d("LOL", "azimuth $azimuth")
         compassView.setAzimuth(azimuth)
     }
 
-    private fun showBearing(bearing: Int) {
+    private fun showBearing(bearing: Float) {
         Log.d("LOL", "bearing $bearing")
         compassView.setBearing(bearing)
     }

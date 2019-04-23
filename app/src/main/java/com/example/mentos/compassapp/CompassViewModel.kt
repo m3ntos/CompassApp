@@ -11,7 +11,6 @@ import com.gojuno.koptional.toOptional
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.PublishSubject
-import kotlin.math.roundToInt
 
 class CompassViewModel(
     azimuthProvider: AzimuthProvider,
@@ -27,17 +26,15 @@ class CompassViewModel(
     /**
      * angle in degrees from 0 to 360 clockwise between north and the direction the phone is facing
      */
-    val azimuth: Observable<Int> = azimuthProvider.azimuthInDegrees
+    val azimuth: Observable<Float> = azimuthProvider.azimuthInDegrees
         .toObservable()
         .tryCalcTrueNorth(currentLocation)
-        .map { it.roundToInt() }
 
     /**
      * angle in degrees from 0 to 360 clockwise between true north and [targetLocation]
      */
-    val bearing: Observable<Int> = Observables
+    val bearing: Observable<Float> = Observables
         .combineLatest(currentLocation, targetLocation, ::calcBearing)
-        .map { it.roundToInt() }
 
     private var permissionGrantedEvent = PublishSubject.create<Unit>()
 
