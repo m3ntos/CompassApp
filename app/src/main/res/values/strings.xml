@@ -3,4 +3,9 @@
 
     <string name="compass_view_azimuth">azimuth: %1.0f°</string>
     <string name="compass_view_bearing">bearing: %1.0f°</string>
+
+    <string name="coordinates_dialog_hint_latitude">Latitude</string>
+    <string name="coordinates_dialog_hint_longitude">Longitude</string>
+    <string name="coordinates_dialog_error_latitude">Invalid value</string>
+    <string name="coordinates_dialog_error_longitude">Invalid value</string>
 </resources>
