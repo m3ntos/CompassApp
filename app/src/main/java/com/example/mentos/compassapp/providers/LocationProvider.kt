@@ -20,7 +20,14 @@ class LocationProvider(appContext: Context) {
         .setInterval(LOCATION_UPDATES_INTERVAL_IN_MILLIS)
 
     @SuppressLint("MissingPermission")
-    val currentLocation: Observable<Location> = rxLocation.location()
+    private val locationObservable: Observable<Location> = rxLocation.location()
         .updates(locationRequest)
-        .onExceptionResumeNext(Observable.empty()) // without permissions, just return empty
+
+    val currentLocation: Observable<Location> = rxLocation.settings()
+        .checkAndHandleResolution(locationRequest)
+        .flatMapObservable { locationObservable }
+        .publish()
+        .refCount()
+
+
 }
