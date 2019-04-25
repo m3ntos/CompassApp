@@ -5,12 +5,10 @@ import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mentos.compassapp.extensions.applyAndroidSchedulers
 import com.github.florent37.runtimepermission.kotlin.askPermission
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -49,19 +47,19 @@ class CompassActivity : AppCompatActivity(), EnterCoordinatesDialog.Callback {
 
     private fun observeData() {
         disposables += viewModel.azimuth
-            .applySchedulers()
+            .applyAndroidSchedulers()
             .subscribe(compassView::setAzimuth)
 
         disposables += viewModel.bearing
-            .applySchedulers()
+            .applyAndroidSchedulers()
             .subscribe(compassView::setBearing)
 
         disposables += viewModel.currentLocation
-            .applySchedulers()
+            .applyAndroidSchedulers()
             .subscribe(::showCurrentLocation)
 
         disposables += viewModel.targetLocation
-            .applySchedulers()
+            .applyAndroidSchedulers()
             .subscribe(::showTargetLocation)
     }
 
@@ -73,12 +71,6 @@ class CompassActivity : AppCompatActivity(), EnterCoordinatesDialog.Callback {
     private fun showTargetLocation(location: Location) {
         tvTargetLocation.text =
             getString(R.string.location_format, location.latitude, location.longitude)
-    }
-
-    private fun <T> Observable<T>.applySchedulers(): Observable<T> {
-        return this
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
     private fun askForLocationPermissionWithRationaleDialog(onGranted: () -> Unit = {}) {
