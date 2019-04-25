@@ -9,11 +9,15 @@ import io.reactivex.Observable
 
 class LocationProvider(appContext: Context) {
 
+    companion object {
+        const val LOCATION_UPDATES_INTERVAL_IN_MILLIS = 5000L
+    }
+
     private val rxLocation = RxLocation(appContext)
 
     private val locationRequest = LocationRequest.create()
         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        .setInterval(5000)
+        .setInterval(LOCATION_UPDATES_INTERVAL_IN_MILLIS)
 
     @SuppressLint("MissingPermission")
     val currentLocation: Observable<Location> = rxLocation.location()
