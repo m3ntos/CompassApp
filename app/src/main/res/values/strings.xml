@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">CompassApp</string>
 
+    <string name="target_location_not_set">target location not set</string>
+    <string name="select_target_location">Select target location</string>
+    <string name="current_location_unknown">current location unknown</string>
+    <string name="location_format">lat: %1f lng: %1f</string>
+
+
     <string name="compass_view_azimuth">azimuth: %1.0f°</string>
     <string name="compass_view_bearing">bearing: %1.0f°</string>
 
@@ -8,4 +14,5 @@
     <string name="coordinates_dialog_hint_longitude">Longitude</string>
     <string name="coordinates_dialog_error_latitude">Invalid value</string>
     <string name="coordinates_dialog_error_longitude">Invalid value</string>
+
 </resources>

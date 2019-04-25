@@ -2,21 +2,23 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:parentTag="android.widget.FrameLayout">
 
     <ImageView
         android:id="@+id/imageCompass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:tint="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         app:srcCompat="@drawable/compass_rose" />
 
     <ImageView
         android:id="@+id/imageArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:tint="@color/colorCompassArrow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:visibility="gone"
         app:srcCompat="@drawable/compass_arrow"

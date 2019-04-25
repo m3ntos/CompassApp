@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class CompassActivity : AppCompatActivity() {
 
     private val viewModel: CompassViewModel by viewModel()
     private val disposables by lazy { CompositeDisposable() }
@@ -71,12 +71,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun showCurrentLocation(location: Location) {
         Log.d("LOL", "current location $location")
-        tvCurrentLocation.text = "lat ${location.latitude} lng ${location.longitude}"
+        tvCurrentLocation.text = getString(R.string.location_format, location.latitude, location.longitude)
     }
 
     private fun showTargetLocation(location: Location) {
         Log.d("LOL", "ratget location $location")
-        tvTargetLocation.text = "lat ${location.latitude} lng ${location.longitude}"
+        tvTargetLocation.text = getString(R.string.location_format, location.latitude, location.longitude)
     }
 
     private fun <T> Observable<T>.applySchedulers(): Observable<T> {
