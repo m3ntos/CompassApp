@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CompassActivity : AppCompatActivity() {
+class CompassActivity : AppCompatActivity(), EnterCoordinatesDialog.Callback {
 
     private val viewModel: CompassViewModel by viewModel()
     private val disposables by lazy { CompositeDisposable() }
@@ -28,8 +28,7 @@ class CompassActivity : AppCompatActivity() {
         btnSetLocation.setOnClickListener {
             askForLocationPermissionWithRationaleDialog {
                 EnterCoordinatesDialog()
-                    .onCoordinatesSet { viewModel.setTargetLocation(it) }
-                    .show(supportFragmentManager, "enterCoordinatesDialog")
+                    .show(supportFragmentManager, EnterCoordinatesDialog::class.java.simpleName)
             }
         }
     }
@@ -42,6 +41,10 @@ class CompassActivity : AppCompatActivity() {
     override fun onStop() {
         disposables.clear()
         super.onStop()
+    }
+
+    override fun onCoordinatesSet(location: Location) {
+        viewModel.setTargetLocation(location)
     }
 
     private fun observeData() {

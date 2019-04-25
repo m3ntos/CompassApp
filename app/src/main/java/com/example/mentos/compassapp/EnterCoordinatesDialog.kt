@@ -2,6 +2,7 @@ package com.example.mentos.compassapp
 
 
 import android.app.Dialog
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.view.View
@@ -13,14 +14,18 @@ import kotlinx.android.synthetic.main.dialog_enter_coordinates.view.*
 
 class EnterCoordinatesDialog : DialogFragment() {
 
+    interface Callback {
+        fun onCoordinatesSet(location: Location)
+    }
+
     private lateinit var customView: View
-    private var onCoordinatesSetListener: ((location: Location) -> Unit)? = null
+    private lateinit var callback: Callback
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater
         customView = inflater.inflate(R.layout.dialog_enter_coordinates, null)
 
-        return Builder(context!!)
+        return Builder(requireContext())
             .setTitle("Enter target coordinates")
             .setView(customView)
             .setPositiveButton(android.R.string.ok, null)
@@ -30,9 +35,13 @@ class EnterCoordinatesDialog : DialogFragment() {
 
     }
 
-    fun onCoordinatesSet(onCoordinatesSet: (location: Location) -> Unit): EnterCoordinatesDialog {
-        this.onCoordinatesSetListener = onCoordinatesSet
-        return this
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            callback = context as Callback
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$context must implement EnterCoordinatesDialog.Callback")
+        }
     }
 
     private fun initDialog(dialog: AlertDialog) {
@@ -45,7 +54,6 @@ class EnterCoordinatesDialog : DialogFragment() {
         val latitude = customView.etLatitude.text.toString()
         val longitude = customView.etLongitude.text.toString()
 
-
         if (!isValid(latitude, longitude)) {
             setErrorMessages(latitude, longitude)
             return
@@ -55,7 +63,7 @@ class EnterCoordinatesDialog : DialogFragment() {
             this.latitude = latitude.toDouble()
             this.longitude = longitude.toDouble()
         }
-        onCoordinatesSetListener?.invoke(location)
+        callback.onCoordinatesSet(location)
         dismiss()
     }
 

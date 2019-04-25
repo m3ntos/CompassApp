@@ -10,6 +10,7 @@ import com.gojuno.koptional.Some
 import com.gojuno.koptional.toOptional
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class CompassViewModel(
@@ -21,7 +22,7 @@ class CompassViewModel(
         .onExceptionResumeNext(Observable.empty())
         .repeatWhen { repeatHandler -> repeatHandler.flatMap { permissionGrantedEvent } }
 
-    var targetLocation: Observable<Location> = PublishSubject.create<Location>()
+    var targetLocation: Observable<Location> = BehaviorSubject.create<Location>()
 
     /**
      * angle in degrees from 0 to 360 clockwise between north and the direction the phone is facing
@@ -44,7 +45,7 @@ class CompassViewModel(
     }
 
     fun setTargetLocation(targetLocation: Location) {
-        (this.targetLocation as PublishSubject).onNext(targetLocation)
+        (this.targetLocation as BehaviorSubject).onNext(targetLocation)
     }
 
     /**
