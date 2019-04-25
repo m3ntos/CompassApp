@@ -52,14 +52,15 @@ class AzimuthProvider(appContext: Context) {
         val movingAverage = this
             .doOnNext { publishSubject.onNext(it) }
             .buffer(n, 1)
+            .map { averageAngles(it) }
 
         val averagesUntilBufferReachesN = publishSubject
             .toFlowable(BackpressureStrategy.LATEST)
             .take(n.toLong())
             .scan(listOf()) { list: List<Double>, value: Double -> list + value }
+            .map { averageAngles(it) }
 
         return Flowable.merge(averagesUntilBufferReachesN, movingAverage)
-            .map { averageAngles(it) }
     }
 
     private fun averageAngles(list: List<Double>): Double {
