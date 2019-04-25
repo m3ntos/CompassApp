@@ -3,7 +3,7 @@ package com.example.mentos.compassapp
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import io.reactivex.Observable
@@ -23,10 +23,10 @@ class CompassActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        askPermission(ACCESS_FINE_LOCATION) { viewModel.onLocationPermissionGranted() }
+        askForLocationPermissionWithRationaleDialog()
 
         btnSetLocation.setOnClickListener {
-            askPermission(ACCESS_FINE_LOCATION) {
+            askForLocationPermissionWithRationaleDialog {
                 EnterCoordinatesDialog()
                     .onCoordinatesSet { viewModel.setTargetLocation(it) }
                     .show(supportFragmentManager, "enterCoordinatesDialog")
@@ -36,14 +36,22 @@ class CompassActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        observeData()
+    }
 
+    override fun onStop() {
+        disposables.clear()
+        super.onStop()
+    }
+
+    private fun observeData() {
         disposables += viewModel.azimuth
             .applySchedulers()
-            .subscribe(::showAzimuth)
+            .subscribe(compassView::setAzimuth)
 
         disposables += viewModel.bearing
             .applySchedulers()
-            .subscribe(::showBearing)
+            .subscribe(compassView::setBearing)
 
         disposables += viewModel.currentLocation
             .applySchedulers()
@@ -54,35 +62,34 @@ class CompassActivity : AppCompatActivity() {
             .subscribe(::showTargetLocation)
     }
 
-    override fun onStop() {
-        disposables.clear()
-        super.onStop()
-    }
-
-    private fun showAzimuth(azimuth: Float) {
-        Log.d("LOL", "azimuth $azimuth")
-        compassView.setAzimuth(azimuth)
-    }
-
-    private fun showBearing(bearing: Float) {
-        Log.d("LOL", "bearing $bearing")
-        compassView.setBearing(bearing)
-    }
-
     private fun showCurrentLocation(location: Location) {
-        Log.d("LOL", "current location $location")
-        tvCurrentLocation.text = getString(R.string.location_format, location.latitude, location.longitude)
+        tvCurrentLocation.text =
+            getString(R.string.location_format, location.latitude, location.longitude)
     }
 
     private fun showTargetLocation(location: Location) {
-        Log.d("LOL", "ratget location $location")
-        tvTargetLocation.text = getString(R.string.location_format, location.latitude, location.longitude)
+        tvTargetLocation.text =
+            getString(R.string.location_format, location.latitude, location.longitude)
     }
 
     private fun <T> Observable<T>.applySchedulers(): Observable<T> {
         return this
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun askForLocationPermissionWithRationaleDialog(onGranted: () -> Unit = {}) {
+        askPermission(ACCESS_FINE_LOCATION) {
+            viewModel.onLocationPermissionGranted()
+            onGranted()
+        }.onDeclined {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.enable_location_dialog_title)
+                .setMessage(R.string.enable_location_dialog_message)
+                .setPositiveButton(R.string.enable_location_dialog_positive_btn) { _, _ -> it.askAgain() }
+                .setNegativeButton(android.R.string.cancel, null)
+                .create().show()
+        }
     }
 }
 
