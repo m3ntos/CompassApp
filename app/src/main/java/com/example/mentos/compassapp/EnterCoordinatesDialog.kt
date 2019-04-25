@@ -26,7 +26,7 @@ class EnterCoordinatesDialog : DialogFragment() {
         customView = inflater.inflate(R.layout.dialog_enter_coordinates, null)
 
         return Builder(requireContext())
-            .setTitle("Enter target coordinates")
+            .setTitle(R.string.coordinates_dialog_title)
             .setView(customView)
             .setPositiveButton(android.R.string.ok, null)
             .setNegativeButton(android.R.string.cancel, null)

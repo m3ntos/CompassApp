@@ -14,6 +14,8 @@
     <string name="coordinates_dialog_hint_longitude">Longitude</string>
     <string name="coordinates_dialog_error_latitude">Invalid value</string>
     <string name="coordinates_dialog_error_longitude">Invalid value</string>
+    <string name="coordinates_dialog_title">Enter target coordinates</string>
+
 
     <string name="enable_location_dialog_title">Enable location access</string>
     <string name="enable_location_dialog_message">Knowing device location will allow to the app find true (geographic) north as well as calculate heading to given destination.</string>
